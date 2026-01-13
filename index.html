@@ -3,70 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Farewell 2025-26 | PM SHRI KV BHAWANIPATNA</title>
+    <title>Invitation: Farewell 2025-26 | PM SHRI KV BHAWANIPATNA</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700&family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://img.icons8.com/color/96/000000/graduation-cap.png">
 </head>
 <body>
-    <!-- Creator Banner -->
-    <div class="creator-banner">
-        <div class="creator-content">
-            <i class="fas fa-code"></i>
-            <span>Made by <strong>Sohan Sahu</strong></span>
+    <!-- Creator Banner - Only at Top -->
+    <div class="creator-banner" id="creatorBanner">
+        <div class="creator-banner-content">
+            <div class="creator-sparkle">
+                <i class="fas fa-code"></i>
+            </div>
+            <div class="creator-text">
+                <span class="made-by">CREATED BY</span>
+                <span class="creator-name">SOHAN SAHU</span>
+                <span class="creator-tag">Class XII Student</span>
+            </div>
+            <div class="creator-badge-glow"></div>
         </div>
     </div>
 
-    <!-- Background -->
+    <!-- Background Elements -->
     <div class="stars"></div>
     <div class="twinkling"></div>
     <div class="particles" id="particles"></div>
-
-    <!-- Navigation -->
+    
+    <!-- Animated Navigation -->
     <nav class="nav-container">
         <div class="nav-logo">
             <div class="hologram-logo">
                 <div class="hologram-inner"></div>
             </div>
-            <span>FAREWELL 2025-26</span>
+            <span>FAREWELL INVITATION</span>
         </div>
-        <button class="menu-toggle" id="menuToggle">
+        <div class="nav-invite-code">
+            <span>CODE: </span>
+            <code>KVBP-2025-26</code>
+        </div>
+        <button class="hologram-button mobile-only" id="mobileMenuBtn">
             <i class="fas fa-bars"></i>
+        </button>
+        <button class="hologram-button desktop-only" id="rsvpBtn">
+            <span>RSVP NOW</span>
+            <div class="button-glow"></div>
         </button>
     </nav>
 
     <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="close-menu" id="closeMenu">
-            <i class="fas fa-times"></i>
-        </button>
-        <div class="menu-content">
-            <a href="#invitation" class="menu-link">
-                <i class="fas fa-envelope"></i>
-                Invitation
-            </a>
-            <a href="#rsvp" class="menu-link">
-                <i class="fas fa-calendar-check"></i>
-                RSVP
-            </a>
-            <a href="#guests" class="menu-link">
-                <i class="fas fa-users"></i>
-                Guests
-            </a>
-            <a href="#memories" class="menu-link">
-                <i class="fas fa-heart"></i>
-                Memories
-            </a>
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay">
+        <div class="mobile-menu">
+            <button class="close-menu" id="closeMenu">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="mobile-nav">
+                <a href="#home" class="mobile-nav-link active">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a href="#rsvp-section" class="mobile-nav-link">
+                    <i class="fas fa-calendar-check"></i>
+                    <span>RSVP</span>
+                </a>
+                <a href="#guests" class="mobile-nav-link">
+                    <i class="fas fa-users"></i>
+                    <span>Guests</span>
+                </a>
+                <a href="#memories" class="mobile-nav-link">
+                    <i class="fas fa-heart"></i>
+                    <span>Memories</span>
+                </a>
+            </div>
             <div class="mobile-stats">
-                <div class="stat">
-                    <span id="mobileTotalGuests">0</span>
-                    <small>Guests</small>
+                <div class="mobile-stat">
+                    <span id="mobileTotalCount">0</span>
+                    <small>Total</small>
                 </div>
-                <div class="stat">
-                    <span id="mobileTeachers">0</span>
+                <div class="mobile-stat">
+                    <span id="mobileStudentCount">0</span>
+                    <small>Students</small>
+                </div>
+                <div class="mobile-stat">
+                    <span id="mobileTeacherCount">0</span>
                     <small>Teachers</small>
                 </div>
             </div>
@@ -75,36 +94,46 @@
 
     <!-- Main Content -->
     <main>
-        <!-- Invitation Section -->
-        <section class="hero-invitation" id="invitation">
+        <!-- Hero Invitation Section -->
+        <section class="hero-invitation" id="home">
             <div class="invitation-card">
-                <div class="school-header">
+                <!-- Top Decorative Elements -->
+                <div class="invitation-border-top">
+                    <div class="border-element"></div>
+                    <div class="border-element"></div>
+                    <div class="border-element"></div>
+                </div>
+                
+                <!-- Invitation Content -->
+                <div class="invitation-content">
                     <div class="school-badge">
-                        <i class="fas fa-graduation-cap"></i>
+                        <div class="badge-circle">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h3>PM SHRI KENDRIYA VIDYALAYA</h3>
+                        <p>BHAWANIPATNA</p>
                     </div>
-                    <div class="school-info">
-                        <h1>PM SHRI KENDRIYA VIDYALAYA</h1>
-                        <p class="location">BHAWANIPATNA</p>
+                    
+                    <div class="invitation-title">
+                        <h1 class="glitch" data-text="YOU'RE INVITED">YOU'RE INVITED</h1>
+                        <div class="subtitle">
+                            <span class="neon-text">TO THE GRAND FAREWELL</span>
+                            <span class="cyber-text">CLASS XII BATCH 2025-26</span>
+                        </div>
                     </div>
-                </div>
-
-                <div class="invitation-title">
-                    <h2 class="glitch-text">FAREWELL INVITATION</h2>
-                    <p class="subtitle">Class XII Batch 2025-26</p>
-                </div>
-
-                <div class="invitation-details">
-                    <div class="detail-grid">
-                        <div class="detail-item">
+                    
+                    <div class="invitation-details">
+                        <div class="detail-card">
                             <div class="detail-icon">
-                                <i class="fas fa-calendar"></i>
+                                <i class="fas fa-calendar-star"></i>
                             </div>
                             <div class="detail-content">
                                 <h4>DATE</h4>
                                 <p>Coming Soon</p>
                             </div>
                         </div>
-                        <div class="detail-item">
+                        
+                        <div class="detail-card">
                             <div class="detail-icon">
                                 <i class="fas fa-clock"></i>
                             </div>
@@ -113,9 +142,10 @@
                                 <p>Evening Celebration</p>
                             </div>
                         </div>
-                        <div class="detail-item">
+                        
+                        <div class="detail-card">
                             <div class="detail-icon">
-                                <i class="fas fa-map-marker-alt"></i>
+                                <i class="fas fa-location-dot"></i>
                             </div>
                             <div class="detail-content">
                                 <h4>VENUE</h4>
@@ -123,105 +153,153 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div class="action-buttons">
-                    <button class="primary-btn" id="rsvpTrigger">
+                    
+                    <!-- Live Stats -->
+                    <div class="live-stats">
+                        <div class="live-stat">
+                            <i class="fas fa-user-graduate"></i>
+                            <div class="stat-content">
+                                <h3 id="liveStudents">0</h3>
+                                <p>Students</p>
+                            </div>
+                        </div>
+                        <div class="live-stat">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                            <div class="stat-content">
+                                <h3 id="liveTeachers">0</h3>
+                                <p>Teachers</p>
+                            </div>
+                        </div>
+                        <div class="live-stat">
+                            <i class="fas fa-check-circle"></i>
+                            <div class="stat-content">
+                                <h3 id="liveTotal">0</h3>
+                                <p>Confirmed</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Special Invitation Messages -->
+                    <div class="special-invitations">
+                        <div class="invitation-message">
+                            <h3><i class="fas fa-chalkboard-teacher"></i> TO OUR BELOVED TEACHERS</h3>
+                            <p>Your guidance has been our compass. Please grace the occasion as we express our gratitude.</p>
+                        </div>
+                        
+                        <div class="invitation-message">
+                            <h3><i class="fas fa-user-graduate"></i> TO CLASS XII STUDENTS</h3>
+                            <p>This is our moment to celebrate the journey, the struggles, and the triumphs together.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- RSVP Button -->
+                    <button class="invitation-cta" id="confirmAttendance">
                         <i class="fas fa-check-circle"></i>
-                        RSVP NOW
+                        <span>CONFIRM YOUR ATTENDANCE</span>
+                        <div class="cta-glow"></div>
                     </button>
-                    <button class="secondary-btn" id="viewGuests">
-                        <i class="fas fa-users"></i>
-                        VIEW GUESTS
-                    </button>
+                </div>
+                
+                <!-- Bottom Decorative Elements -->
+                <div class="invitation-border-bottom">
+                    <div class="scan-line"></div>
+                    <div class="binary-code">
+                        01000110 01000001 01010010 01000101 01010111 01000101 01001100 01001100
+                    </div>
                 </div>
             </div>
-
-            <!-- Stats Counter -->
-            <div class="stats-counter">
-                <div class="stat-card">
-                    <i class="fas fa-user-graduate"></i>
-                    <div class="stat-info">
-                        <h3 id="totalStudents">0</h3>
-                        <p>Students</p>
-                    </div>
+            
+            <!-- Floating Elements -->
+            <div class="invitation-floating">
+                <div class="floating-msg">
+                    <i class="fas fa-heart"></i>
+                    Memories Forever
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-chalkboard-teacher"></i>
-                    <div class="stat-info">
-                        <h3 id="totalTeachers">0</h3>
-                        <p>Teachers</p>
-                    </div>
+                <div class="floating-msg">
+                    <i class="fas fa-star"></i>
+                    Celebrate With Us
                 </div>
-                <div class="stat-card">
-                    <i class="fas fa-calendar-check"></i>
-                    <div class="stat-info">
-                        <h3 id="totalRSVP">0</h3>
-                        <p>Confirmed</p>
-                    </div>
+                <div class="floating-msg">
+                    <i class="fas fa-rocket"></i>
+                    To The Future
                 </div>
             </div>
         </section>
 
-        <!-- RSVP Section -->
-        <section class="rsvp-section" id="rsvp">
+        <!-- RSVP Form Section -->
+        <section class="rsvp-section" id="rsvp-section">
             <h2 class="section-title">
-                <i class="fas fa-edit"></i>
-                CONFIRM YOUR ATTENDANCE
+                <i class="fas fa-calendar-check"></i>
+                <span>DIGITAL RSVP FORM</span>
             </h2>
-
-            <div class="rsvp-form-card">
+            
+            <div class="rsvp-form-container">
                 <div class="form-header">
-                    <i class="fas fa-qrcode"></i>
-                    <h3>DIGITAL RSVP FORM</h3>
+                    <div class="form-icon">
+                        <i class="fas fa-qrcode"></i>
+                    </div>
+                    <div class="form-info">
+                        <h3>Secure Your Spot</h3>
+                        <p>Fill this form to confirm your attendance</p>
+                    </div>
                 </div>
-
+                
                 <form id="rsvpForm">
-                    <div class="form-group">
-                        <div class="input-with-icon">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="fullName" placeholder="Full Name" required>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="input-with-icon">
+                                <i class="fas fa-user"></i>
+                                <input type="text" id="fullName" placeholder="Your Full Name" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="input-with-icon">
+                                <i class="fas fa-envelope"></i>
+                                <input type="email" id="email" placeholder="Email Address" required>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="input-with-icon">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" placeholder="Email Address" required>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <div class="input-with-icon">
+                                <i class="fas fa-users"></i>
+                                <select id="category" required>
+                                    <option value="">Select Category</option>
+                                    <option value="student">Class XII Student</option>
+                                    <option value="teacher">Teacher</option>
+                                    <option value="alumni">Alumni</option>
+                                    <option value="guest">Special Guest</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="input-with-icon">
+                                <i class="fas fa-user-plus"></i>
+                                <input type="number" id="guests" placeholder="Additional Guests" min="0" max="2" value="0">
+                            </div>
                         </div>
                     </div>
-
-                    <div class="form-group">
+                    
+                    <div class="form-group full-width">
                         <div class="input-with-icon">
-                            <i class="fas fa-users"></i>
-                            <select id="category" required>
-                                <option value="">Select Category</option>
-                                <option value="student">Class XII Student</option>
-                                <option value="teacher">Teacher</option>
-                                <option value="alumni">Alumni</option>
-                                <option value="guest">Special Guest</option>
-                            </select>
+                            <i class="fas fa-comment-dots"></i>
+                            <textarea id="message" placeholder="Special message or dietary requirements (optional)" rows="3"></textarea>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="input-with-icon">
-                            <i class="fas fa-user-plus"></i>
-                            <input type="number" id="guests" placeholder="Additional Guests (0-2)" min="0" max="2">
+                    
+                    <div class="form-actions">
+                        <button type="submit" class="submit-rsvp" id="submitRsvp">
+                            <i class="fas fa-paper-plane"></i>
+                            <span>SUBMIT RSVP</span>
+                        </button>
+                        <div class="form-note">
+                            <i class="fas fa-info-circle"></i>
+                            <p>Confirmation will be sent to your email. Live updates shown on dashboard.</p>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <div class="input-with-icon">
-                            <i class="fas fa-comment"></i>
-                            <textarea id="message" placeholder="Special message (optional)" rows="3"></textarea>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn">
-                        <i class="fas fa-paper-plane"></i>
-                        SUBMIT RSVP
-                    </button>
                 </form>
             </div>
         </section>
@@ -231,124 +309,245 @@
             <div class="section-header">
                 <h2 class="section-title">
                     <i class="fas fa-users"></i>
-                    CONFIRMED GUESTS
+                    <span>CONFIRMED GUESTS</span>
                 </h2>
-                <div class="filter-options">
+                <div class="section-filters">
                     <button class="filter-btn active" data-filter="all">All</button>
                     <button class="filter-btn" data-filter="student">Students</button>
                     <button class="filter-btn" data-filter="teacher">Teachers</button>
+                    <button class="filter-btn" data-filter="recent">Recent</button>
                 </div>
             </div>
-
+            
+            <div class="firebase-status">
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span id="firebaseStatusText">Connecting to live database...</span>
+                </div>
+                <div class="status-stats">
+                    <span id="onlineCount">0</span> online •
+                    <span id="updateTime">Just now</span>
+                </div>
+            </div>
+            
             <div class="guests-container">
                 <div class="guests-list" id="guestsList">
-                    <!-- Guests will be loaded here from Firebase -->
-                    <div class="loading">
-                        <i class="fas fa-spinner fa-spin"></i>
-                        <p>Loading guests...</p>
+                    <!-- Guests loaded from Firebase -->
+                    <div class="loading-state">
+                        <div class="loading-spinner">
+                            <i class="fas fa-spinner fa-spin"></i>
+                        </div>
+                        <p>Loading guest list from database...</p>
                     </div>
                 </div>
             </div>
-
-            <div class="guest-stats">
-                <div class="stat">
-                    <span id="guestCount">0</span>
-                    <small>Total Guests</small>
+            
+            <div class="guests-stats">
+                <div class="stat-item">
+                    <div class="stat-value" id="guestCount">0</div>
+                    <div class="stat-label">Total Guests</div>
                 </div>
-                <div class="stat">
-                    <span id="studentCount">0</span>
-                    <small>Students</small>
+                <div class="stat-item">
+                    <div class="stat-value" id="studentCount">0</div>
+                    <div class="stat-label">Students</div>
                 </div>
-                <div class="stat">
-                    <span id="teacherCount">0</span>
-                    <small>Teachers</small>
+                <div class="stat-item">
+                    <div class="stat-value" id="teacherCount">0</div>
+                    <div class="stat-label">Teachers</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" id="recentCount">0</div>
+                    <div class="stat-label">Today</div>
                 </div>
             </div>
         </section>
 
-        <!-- Memories Section -->
-        <section class="memories-section" id="memories">
+        <!-- Memory Wall Section -->
+        <section class="memory-wall" id="memories">
             <h2 class="section-title">
                 <i class="fas fa-heart"></i>
-                MEMORY WALL
+                <span>MEMORY WALL</span>
             </h2>
-
-            <div class="memory-form">
-                <div class="form-group">
-                    <input type="text" id="memoryAuthor" placeholder="Your Name (Optional)" maxlength="30">
+            
+            <div class="memory-input-container">
+                <div class="memory-input-header">
+                    <h3><i class="fas fa-keyboard"></i> Share Your Memory</h3>
+                    <div class="char-count">
+                        <span id="charCount">0</span>/500
+                    </div>
                 </div>
-                <div class="form-group">
-                    <textarea id="memoryText" placeholder="Share your favorite memory from school..." rows="3" maxlength="500"></textarea>
+                
+                <div class="memory-input">
+                    <div class="input-with-icon">
+                        <i class="fas fa-user-circle"></i>
+                        <input type="text" id="memoryName" placeholder="Your Name (Optional)">
+                    </div>
+                    <div class="input-with-icon">
+                        <i class="fas fa-comment"></i>
+                        <textarea id="memoryText" placeholder="Share a favorite memory from school..." rows="4" maxlength="500"></textarea>
+                    </div>
+                    <button class="post-memory-btn" id="postMemory">
+                        <i class="fas fa-share"></i>
+                        POST TO WALL
+                    </button>
                 </div>
-                <button class="post-btn" id="postMemory">
-                    <i class="fas fa-share"></i>
-                    POST MEMORY
-                </button>
             </div>
-
+            
             <div class="memories-container" id="memoriesContainer">
-                <!-- Memories will be loaded here from Firebase -->
-                <div class="loading">
-                    <i class="fas fa-spinner fa-spin"></i>
+                <!-- Memories loaded from Firebase -->
+                <div class="loading-state">
+                    <div class="loading-spinner">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
                     <p>Loading memories...</p>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
-        <footer class="footer">
+        <footer class="invitation-footer">
             <div class="footer-content">
-                <div class="footer-info">
+                <div class="footer-main">
                     <div class="footer-logo">
-                        <i class="fas fa-school"></i>
+                        <div class="hologram-logo-small">
+                            <i class="fas fa-school"></i>
+                        </div>
+                        <div class="school-info">
+                            <h3>PM SHRI KENDRIYA VIDYALAYA</h3>
+                            <p class="school-address">BhawaniPatna, Odisha</p>
+                            <p class="farewell-year">Farewell 2025-26</p>
+                        </div>
                     </div>
-                    <div class="footer-text">
-                        <h3>PM SHRI KENDRIYA VIDYALAYA</h3>
-                        <p>BhawaniPatna, Odisha</p>
-                        <p class="batch">Class XII Batch 2025-26</p>
+                    
+                    <div class="footer-links">
+                        <h4>QUICK LINKS</h4>
+                        <a href="#home" class="footer-link">
+                            <i class="fas fa-home"></i>
+                            <span>Home</span>
+                        </a>
+                        <a href="#rsvp-section" class="footer-link">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>RSVP</span>
+                        </a>
+                        <a href="#guests" class="footer-link">
+                            <i class="fas fa-users"></i>
+                            <span>Guests</span>
+                        </a>
+                        <a href="#memories" class="footer-link">
+                            <i class="fas fa-heart"></i>
+                            <span>Memories</span>
+                        </a>
+                    </div>
+                    
+                    <div class="footer-tech">
+                        <h4>TECH STACK</h4>
+                        <div class="tech-stack">
+                            <span class="tech-tag">HTML5</span>
+                            <span class="tech-tag">CSS3</span>
+                            <span class="tech-tag">JavaScript</span>
+                            <span class="tech-tag">Firebase</span>
+                        </div>
+                        <div class="firebase-badge">
+                            <i class="fas fa-database"></i>
+                            <span>Live Database</span>
+                        </div>
                     </div>
                 </div>
-
-                <div class="footer-links">
-                    <h4>Quick Access</h4>
-                    <a href="#invitation">Invitation</a>
-                    <a href="#rsvp">RSVP</a>
-                    <a href="#guests">Guests</a>
-                    <a href="#memories">Memories</a>
+                
+                <div class="footer-divider">
+                    <div class="scan-line-footer"></div>
                 </div>
-
-                <div class="firebase-status">
-                    <div class="status-indicator" id="firebaseStatus">
-                        <div class="status-dot"></div>
-                        <span>Connecting to Database...</span>
+                
+                <div class="footer-bottom">
+                    <div class="developer-info">
+                        <div class="developer-card">
+                            <i class="fas fa-user-astronaut"></i>
+                            <div class="developer-details">
+                                <h5>CREATED WITH</h5>
+                                <p class="developer-name">SOHAN SAHU</p>
+                                <p class="developer-role">Class XII Student & Developer</p>
+                            </div>
+                        </div>
                     </div>
-                    <p class="hint">Live updates from Firebase</p>
+                    
+                    <div class="deployment-info">
+                        <p>
+                            <i class="fab fa-github"></i>
+                            <span>Deployed via GitHub Pages</span>
+                        </p>
+                        <p class="timestamp" id="currentDate"></p>
+                    </div>
+                    
+                    <div class="footer-note">
+                        <p>© 2025-26 PM SHRI KENDRIYA VIDYALAYA BHAWANIPATNA</p>
+                        <p class="farewell-quote">"The tassel was worth the hassle!"</p>
+                    </div>
                 </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>© 2025-26 Farewell | PM SHRI KV BHAWANIPATNA</p>
-                <p class="developer">Digital Invitation created by <strong>Sohan Sahu</strong></p>
             </div>
         </footer>
     </main>
 
     <!-- Confirmation Modal -->
-    <div class="modal" id="confirmationModal">
+    <div class="modal-overlay" id="confirmationModal">
         <div class="modal-content">
             <div class="modal-header">
-                <i class="fas fa-check-circle"></i>
-                <h3>RSVP CONFIRMED!</h3>
+                <div class="modal-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h2>RSVP CONFIRMED!</h2>
+                <button class="modal-close" id="closeModal">&times;</button>
             </div>
             <div class="modal-body">
-                <p id="confirmationMessage">Thank you for your RSVP!</p>
-                <div class="confirmation-details">
-                    <p><strong>Invitation Code:</strong> <code id="invitationCode">LOADING...</code></p>
-                    <p><strong>Status:</strong> <span class="status-confirmed">Confirmed ✓</span></p>
+                <div class="confirmation-animation">
+                    <div class="confirmation-ring"></div>
+                    <i class="fas fa-check"></i>
                 </div>
-                <button class="modal-close-btn" id="closeModal">OK</button>
+                <h3 id="confirmName">Guest</h3>
+                <p class="confirmation-message">Your invitation has been successfully registered in our database.</p>
+                
+                <div class="confirmation-details">
+                    <div class="detail-row">
+                        <i class="fas fa-qrcode"></i>
+                        <div class="detail-text">
+                            <span class="detail-label">Digital Pass</span>
+                            <code id="passCode">KVBP-XXXX-XXXX</code>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-envelope"></i>
+                        <div class="detail-text">
+                            <span class="detail-label">Confirmation Sent</span>
+                            <span id="confirmEmail">email@example.com</span>
+                        </div>
+                    </div>
+                    <div class="detail-row">
+                        <i class="fas fa-database"></i>
+                        <div class="detail-text">
+                            <span class="detail-label">Database ID</span>
+                            <span id="dbId">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="modal-action-btn" id="downloadPass">
+                    <i class="fas fa-download"></i>
+                    DOWNLOAD DIGITAL PASS
+                </button>
             </div>
         </div>
+    </div>
+
+    <!-- Music Control -->
+    <div class="music-control">
+        <button id="musicToggle" class="music-btn">
+            <i class="fas fa-music"></i>
+        </button>
+        <div class="music-status">
+            <span>Background Music</span>
+        </div>
+        <audio id="backgroundMusic" loop>
+            <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
+        </audio>
     </div>
 
     <!-- Scroll to Top -->
@@ -356,16 +555,14 @@
         <i class="fas fa-chevron-up"></i>
     </button>
 
-    <!-- Music Control -->
-    <div class="music-control">
-        <button id="musicToggle">
-            <i class="fas fa-music"></i>
-        </button>
-        <audio id="backgroundMusic" loop>
-            <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
-        </audio>
+    <!-- Notification -->
+    <div class="notification-container" id="notificationContainer">
+        <!-- Notifications will appear here -->
     </div>
 
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
