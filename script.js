@@ -1,31 +1,20 @@
-// Initialize when DOM is loaded
+// Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    // Initialize particles
+    // Initialize everything
     initParticles();
-    
-    // Initialize counters
-    initCounters();
-    
-    // Initialize event listeners
     initEventListeners();
-    
-    // Set current date in footer
-    setCurrentDate();
-    
-    // Initialize memory wall with sample memories
     initMemoryWall();
-    
-    // Initialize RSVP stats
-    updateRSVPStats();
+    initMusic();
+    initSmoothScrolling();
 });
 
-// Particle System
+// Particle Background Effect
 function initParticles() {
-    const particlesContainer = document.getElementById('particles');
-    const particleCount = 50;
+    const container = document.getElementById('particles');
+    const particleCount = window.innerWidth < 768 ? 30 : 50;
     
     for (let i = 0; i < particleCount; i++) {
-        createParticle(particlesContainer);
+        createParticle(container);
     }
 }
 
@@ -34,63 +23,110 @@ function createParticle(container) {
     particle.className = 'particle';
     
     // Random properties
-    const size = Math.random() * 4 + 1;
+    const size = Math.random() * 5 + 2;
     const posX = Math.random() * 100;
     const posY = Math.random() * 100;
     const duration = Math.random() * 20 + 10;
     const delay = Math.random() * 5;
+    const colors = ['#2563eb', '#7c3aed', '#06b6d4', '#10b981'];
+    const color = colors[Math.floor(Math.random() * colors.length)];
     
     particle.style.cssText = `
         position: absolute;
         width: ${size}px;
         height: ${size}px;
-        background: ${Math.random() > 0.5 ? 'var(--primary)' : 'var(--accent)'};
+        background: ${color};
         border-radius: 50%;
         left: ${posX}%;
         top: ${posY}%;
-        opacity: ${Math.random() * 0.5 + 0.1};
-        animation: float-particle ${duration}s linear infinite ${delay}s;
+        opacity: ${Math.random() * 0.4 + 0.1};
+        animation: floatParticle ${duration}s linear infinite ${delay}s;
+        pointer-events: none;
     `;
     
     container.appendChild(particle);
 }
 
-// Counter Animation
-function initCounters() {
-    const counters = document.querySelectorAll('.stat-number');
+// Add CSS for particle animation
+const particleStyle = document.createElement('style');
+particleStyle.textContent = `
+    @keyframes floatParticle {
+        0% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+        }
+        10% {
+            opacity: 0.5;
+        }
+        90% {
+            opacity: 0.5;
+        }
+        100% {
+            transform: translateY(-100vh) translateX(${Math.random() * 100 - 50}px);
+            opacity: 0;
+        }
+    }
+`;
+document.head.appendChild(particleStyle);
+
+// Initialize Event Listeners
+function initEventListeners() {
+    // RSVP Buttons
+    const rsvpBtn = document.getElementById('rsvpBtn');
+    const submitRsvpBtn = document.getElementById('submitRsvp');
     
-    counters.forEach(counter => {
-        const target = parseInt(counter.getAttribute('data-count'));
-        const increment = target / 200;
-        let current = 0;
-        
-        const updateCounter = () => {
-            if (current < target) {
-                current += increment;
-                counter.textContent = Math.ceil(current);
-                setTimeout(updateCounter, 10);
-            } else {
-                counter.textContent = target;
-            }
-        };
-        
-        // Start counter when in viewport
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    updateCounter();
-                    observer.unobserve(entry.target);
-                }
-            });
+    if (rsvpBtn) {
+        rsvpBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            scrollToElement('rsvpForm');
+            showNotification('Scroll to RSVP form');
         });
-        
-        observer.observe(counter);
+    }
+    
+    if (submitRsvpBtn) {
+        submitRsvpBtn.addEventListener('click', handleRSVPSubmit);
+    }
+    
+    // Memory Post
+    const postMemoryBtn = document.getElementById('postMemory');
+    if (postMemoryBtn) {
+        postMemoryBtn.addEventListener('click', postMemory);
+    }
+    
+    // Modal Controls
+    const closeModal = document.getElementById('closeModal');
+    const modalOkBtn = document.getElementById('modalOkBtn');
+    const modal = document.getElementById('confirmationModal');
+    
+    if (closeModal) {
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+    
+    if (modalOkBtn) {
+        modalOkBtn.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
     });
+    
+    // Form input validation
+    initFormValidation();
+    
+    // Add touch effects
+    initTouchEffects();
 }
 
-// Event Listeners
-function initEventListeners() {
-    // Navigation
+// Smooth Scrolling
+function initSmoothScrolling() {
+    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
@@ -99,256 +135,246 @@ function initEventListeners() {
             
             const targetElement = document.querySelector(targetId);
             if (targetElement) {
-                targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
+                scrollToElement(targetId);
             }
         });
     });
+}
 
-    // RSVP Buttons
-    const rsvpBtn = document.getElementById('rsvpBtn');
-    const confirmBtn = document.getElementById('confirmAttendance');
-    const submitRsvpBtn = document.getElementById('submitRsvp');
-    
-    [rsvpBtn, confirmBtn].forEach(btn => {
-        btn?.addEventListener('click', () => {
-            scrollToSection('.rsvp-section');
+function scrollToElement(elementId) {
+    const element = document.getElementById(elementId);
+    if (element) {
+        const yOffset = -80; // Adjust for fixed header
+        const y = element.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        
+        window.scrollTo({
+            top: y,
+            behavior: 'smooth'
         });
-    });
-    
-    // Submit RSVP
-    submitRsvpBtn?.addEventListener('click', submitRSVP);
-    
-    // Memory Post
-    document.getElementById('postMemory')?.addEventListener('click', postMemory);
-    
-    // Modal
-    const modal = document.getElementById('confirmationModal');
-    const closeModal = document.getElementById('closeModal');
-    const downloadPass = document.getElementById('downloadPass');
-    
-    closeModal?.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-    
-    downloadPass?.addEventListener('click', () => {
-        showNotification('Digital pass downloaded successfully!');
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 1000);
-    });
-    
-    // Music Toggle
-    const musicToggle = document.getElementById('musicToggle');
-    const backgroundMusic = document.getElementById('backgroundMusic');
-    
-    musicToggle?.addEventListener('click', () => {
-        if (backgroundMusic.paused) {
-            backgroundMusic.play();
-            musicToggle.innerHTML = '<i class="fas fa-volume-up"></i>';
-            showNotification('Background music enabled');
-        } else {
-            backgroundMusic.pause();
-            musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i>';
-            showNotification('Background music muted');
-        }
-    });
-    
-    // Scroll to Top
-    const scrollTopBtn = document.getElementById('scrollTop');
-    
-    window.addEventListener('scroll', () => {
-        if (window.pageYOffset > 300) {
-            scrollTopBtn.style.display = 'flex';
-        } else {
-            scrollTopBtn.style.display = 'none';
-        }
-    });
-    
-    scrollTopBtn?.addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    
-    // Form validation
-    initFormValidation();
-}
-
-// Scroll to Section
-function scrollToSection(selector) {
-    const section = document.querySelector(selector);
-    if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
     }
 }
 
-// Set Current Date
-function setCurrentDate() {
-    const now = new Date();
-    const options = { 
-        weekday: 'long', 
-        year: 'numeric', 
-        month: 'long', 
-        day: 'numeric' 
-    };
-    const dateString = now.toLocaleDateString('en-US', options);
-    
-    const dateElement = document.getElementById('currentDate');
-    if (dateElement) {
-        dateElement.textContent = dateString;
-    }
-}
-
-// RSVP Submission
-function submitRSVP() {
-    const name = document.getElementById('attendeeName').value.trim();
-    const email = document.getElementById('attendeeEmail').value.trim();
-    const type = document.getElementById('attendeeType').value;
-    const guests = parseInt(document.getElementById('guestCount').value) || 0;
-    const message = document.getElementById('rsvpMessage').value.trim();
+// RSVP Form Handling
+function handleRSVPSubmit() {
+    // Get form values
+    const name = document.getElementById('nameInput').value.trim();
+    const email = document.getElementById('emailInput').value.trim();
+    const category = document.getElementById('categoryInput').value;
+    const guests = parseInt(document.getElementById('guestsInput').value) || 0;
+    const message = document.getElementById('messageInput').value.trim();
     
     // Validation
-    if (!name || !email || !type) {
+    if (!name || !email || !category) {
         showNotification('Please fill all required fields!', 'error');
         return;
     }
     
     if (!validateEmail(email)) {
-        showNotification('Please enter a valid email address!', 'error');
+        showNotification('Please enter a valid email address', 'error');
         return;
     }
     
-    // Generate confirmation
-    const passCode = 'KVBP-' + Math.random().toString(36).substr(2, 8).toUpperCase();
+    if (guests < 0 || guests > 2) {
+        showNotification('Additional guests must be between 0-2', 'error');
+        return;
+    }
+    
+    // Generate confirmation code
+    const inviteCode = 'KVBP-' + Math.random().toString(36).substr(2, 6).toUpperCase();
     
     // Update modal
-    document.getElementById('confirmName').textContent = name;
-    document.getElementById('confirmEmail').textContent = email;
-    document.getElementById('passCode').textContent = passCode;
+    document.getElementById('confirmGreeting').textContent = `Thank you, ${name}!`;
+    document.getElementById('inviteCode').textContent = inviteCode;
     
     // Show modal
     document.getElementById('confirmationModal').style.display = 'flex';
     
-    // Update stats
-    updateRSVPStats();
-    
-    // Clear form
-    clearRSVPForm();
+    // Play success sound
+    playSuccessSound();
     
     // Show success notification
-    showNotification(`RSVP confirmed! Welcome ${name}!`);
+    showNotification('RSVP submitted successfully!');
     
-    // Play confirmation sound
-    playConfirmationSound();
+    // Clear form (optional)
+    setTimeout(() => {
+        clearRSVPForm();
+    }, 500);
 }
 
-// Clear RSVP Form
 function clearRSVPForm() {
-    document.getElementById('attendeeName').value = '';
-    document.getElementById('attendeeEmail').value = '';
-    document.getElementById('attendeeType').value = '';
-    document.getElementById('guestCount').value = '';
-    document.getElementById('rsvpMessage').value = '';
+    document.getElementById('nameInput').value = '';
+    document.getElementById('emailInput').value = '';
+    document.getElementById('categoryInput').value = '';
+    document.getElementById('guestsInput').value = '';
+    document.getElementById('messageInput').value = '';
 }
 
-// Update RSVP Stats
-function updateRSVPStats() {
-    // In a real app, this would come from a server
-    // For demo, we'll use random numbers
-    const teacherCount = Math.floor(Math.random() * 20) + 15;
-    const studentCount = Math.floor(Math.random() * 80) + 40;
-    const totalCount = teacherCount + studentCount;
-    const seatsLeft = Math.max(0, 150 - totalCount);
-    
-    document.getElementById('teacherCount').textContent = teacherCount;
-    document.getElementById('studentCount').textContent = studentCount;
-    document.getElementById('totalCount').textContent = totalCount;
-    document.getElementById('seatsLeft').textContent = seatsLeft;
-}
-
-// Post Memory
-function postMemory() {
-    const name = document.getElementById('memoryName').value.trim() || 'Anonymous';
-    const text = document.getElementById('memoryText').value.trim();
-    
-    if (!text) {
-        showNotification('Please write a memory to post!', 'error');
-        return;
-    }
-    
-    const memoryWall = document.getElementById('memoryWall');
-    const memoryItem = document.createElement('div');
-    memoryItem.className = 'memory-item';
-    
-    const now = new Date();
-    const timeString = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
-    memoryItem.innerHTML = `
-        <div class="memory-header">
-            <span class="memory-author">${name}</span>
-            <span class="memory-time">${timeString}</span>
-        </div>
-        <p class="memory-content">${text}</p>
-    `;
-    
-    memoryWall.insertBefore(memoryItem, memoryWall.firstChild);
-    
-    // Clear form
-    document.getElementById('memoryName').value = '';
-    document.getElementById('memoryText').value = '';
-    
-    // Show notification
-    showNotification('Memory posted to the wall!');
-    
-    // Add animation
-    memoryItem.style.animation = 'fadeIn 0.5s ease-out';
-}
-
-// Initialize Memory Wall with sample memories
+// Memory Wall Functions
 function initMemoryWall() {
+    // Add some sample memories
     const sampleMemories = [
         {
-            name: "Class XII Student",
-            text: "The science fair where our project won first prize! Mrs. Sharma's guidance made it possible."
-        },
-        {
             name: "Batch 2025-26",
-            text: "Sports day 2024 - the cheers, the competition, the unity. We'll miss these moments!"
+            message: "The best years of our lives! Let's make this farewell unforgettable.",
+            time: "2 hours ago"
         },
         {
-            name: "Future Alumni",
-            text: "Late night study sessions in the library before board exams. Worth every minute!"
+            name: "Science Club",
+            message: "Remember our winning project at the science fair! Proud moments.",
+            time: "Yesterday"
+        },
+        {
+            name: "Sports Team",
+            message: "From practice sessions to championship wins - what a journey!",
+            time: "2 days ago"
         }
     ];
     
     sampleMemories.forEach(memory => {
-        const memoryItem = document.createElement('div');
-        memoryItem.className = 'memory-item';
-        
-        memoryItem.innerHTML = `
-            <div class="memory-header">
-                <span class="memory-author">${memory.name}</span>
-                <span class="memory-time">Yesterday</span>
-            </div>
-            <p class="memory-content">${memory.text}</p>
-        `;
-        
-        document.getElementById('memoryWall').appendChild(memoryItem);
+        addMemoryToWall(memory.name, memory.message, memory.time);
     });
+}
+
+function postMemory() {
+    const name = document.getElementById('memoryName').value.trim() || 'Anonymous';
+    const message = document.getElementById('memoryText').value.trim();
+    
+    if (!message) {
+        showNotification('Please write a memory to share!', 'error');
+        return;
+    }
+    
+    if (message.length > 500) {
+        showNotification('Memory is too long (max 500 characters)', 'error');
+        return;
+    }
+    
+    const time = 'Just now';
+    addMemoryToWall(name, message, time);
+    
+    // Clear inputs
+    document.getElementById('memoryName').value = '';
+    document.getElementById('memoryText').value = '';
+    
+    // Show success
+    showNotification('Memory posted successfully!');
+    playPostSound();
+}
+
+function addMemoryToWall(name, message, time) {
+    const container = document.getElementById('memoriesContainer');
+    const memoryItem = document.createElement('div');
+    memoryItem.className = 'memory-item';
+    
+    memoryItem.innerHTML = `
+        <div class="memory-header">
+            <span class="memory-author">${name}</span>
+            <span class="memory-time">${time}</span>
+        </div>
+        <p class="memory-content">${message}</p>
+    `;
+    
+    // Add at the beginning
+    container.insertBefore(memoryItem, container.firstChild);
+    
+    // Add animation
+    memoryItem.style.animation = 'fadeIn 0.5s ease-out';
+    
+    // Limit number of memories
+    if (container.children.length > 10) {
+        container.removeChild(container.lastChild);
+    }
+}
+
+// Music Player
+function initMusic() {
+    const musicToggle = document.querySelector('.music-toggle');
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    
+    if (!musicToggle || !backgroundMusic) return;
+    
+    // Try to play music (autoplay policy)
+    backgroundMusic.volume = 0.3;
+    
+    musicToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (backgroundMusic.paused) {
+            backgroundMusic.play().then(() => {
+                musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> Music ON';
+                showNotification('Background music enabled');
+            }).catch(error => {
+                showNotification('Click anywhere to enable music', 'warning');
+                // Enable on user interaction
+                document.addEventListener('click', enableMusicOnce, { once: true });
+            });
+        } else {
+            backgroundMusic.pause();
+            musicToggle.innerHTML = '<i class="fas fa-volume-mute"></i> Music';
+            showNotification('Background music paused');
+        }
+    });
+    
+    function enableMusicOnce() {
+        backgroundMusic.play().then(() => {
+            musicToggle.innerHTML = '<i class="fas fa-volume-up"></i> Music ON';
+            showNotification('Background music enabled');
+        });
+    }
 }
 
 // Form Validation
 function initFormValidation() {
-    const emailInput = document.getElementById('attendeeEmail');
-    emailInput?.addEventListener('blur', function() {
-        if (this.value && !validateEmail(this.value)) {
-            this.style.borderColor = 'var(--neon-pink)';
-            showNotification('Please enter a valid email address', 'error');
-        } else {
-            this.style.borderColor = '';
-        }
+    const emailInput = document.getElementById('emailInput');
+    const guestsInput = document.getElementById('guestsInput');
+    
+    if (emailInput) {
+        emailInput.addEventListener('blur', function() {
+            if (this.value && !validateEmail(this.value)) {
+                this.style.borderColor = '#ef4444';
+                showNotification('Please check your email format', 'warning');
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+    }
+    
+    if (guestsInput) {
+        guestsInput.addEventListener('change', function() {
+            const value = parseInt(this.value) || 0;
+            if (value < 0 || value > 2) {
+                this.style.borderColor = '#ef4444';
+                showNotification('Additional guests must be 0-2', 'warning');
+            } else {
+                this.style.borderColor = '';
+            }
+        });
+    }
+}
+
+// Touch Effects for Mobile
+function initTouchEffects() {
+    // Add touch feedback to buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+        button.addEventListener('touchstart', function() {
+            this.style.transform = 'scale(0.95)';
+        });
+        
+        button.addEventListener('touchend', function() {
+            this.style.transform = '';
+        });
     });
+    
+    // Prevent zoom on double tap
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', function(event) {
+        const now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+            event.preventDefault();
+        }
+        lastTouchEnd = now;
+    }, false);
 }
 
 // Utility Functions
@@ -358,102 +384,282 @@ function validateEmail(email) {
 }
 
 function showNotification(message, type = 'success') {
+    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification ${type}`;
+    
+    // Icon based on type
+    let icon = 'fa-check-circle';
+    if (type === 'error') icon = 'fa-exclamation-circle';
+    if (type === 'warning') icon = 'fa-exclamation-triangle';
+    
     notification.innerHTML = `
-        <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}"></i>
+        <i class="fas ${icon}"></i>
         <span>${message}</span>
     `;
     
     document.body.appendChild(notification);
     
-    // Add styles for notification
+    // Style the notification
+    const bgColor = type === 'error' ? '#ef4444' : 
+                   type === 'warning' ? '#f59e0b' : 
+                   '#10b981';
+    
     notification.style.cssText = `
         position: fixed;
-        top: 100px;
+        top: 20px;
         right: 20px;
-        background: ${type === 'error' ? 'rgba(255, 50, 50, 0.9)' : 'rgba(0, 217, 255, 0.9)'};
+        background: ${bgColor};
         color: white;
-        padding: 1rem 1.5rem;
+        padding: 15px 20px;
         border-radius: 10px;
         display: flex;
         align-items: center;
-        gap: 1rem;
+        gap: 12px;
         z-index: 3000;
-        animation: slideIn 0.3s ease-out;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        max-width: 300px;
+        animation: slideInRight 0.3s ease-out;
         backdrop-filter: blur(10px);
-        border: 1px solid var(--glass-border);
+        border: 1px solid rgba(255, 255, 255, 0.2);
     `;
     
+    // Add animation styles
+    const notifStyle = document.createElement('style');
+    notifStyle.textContent = `
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+    `;
+    document.head.appendChild(notifStyle);
+    
+    // Remove after 3 seconds
     setTimeout(() => {
-        notification.style.animation = 'slideOut 0.3s ease-out';
+        notification.style.animation = 'slideOutRight 0.3s ease-out';
         setTimeout(() => {
-            document.body.removeChild(notification);
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
         }, 300);
     }, 3000);
 }
 
-function playConfirmationSound() {
+// Sound Effects
+function playSuccessSound() {
     const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3');
     audio.volume = 0.3;
-    audio.play().catch(e => console.log('Audio play failed:', e));
+    audio.play().catch(e => console.log('Audio play failed'));
 }
 
-// Add CSS animations
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes float-particle {
-        0% {
-            transform: translateY(0) translateX(0);
-            opacity: 0;
+function playPostSound() {
+    const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
+    audio.volume = 0.2;
+    audio.play().catch(e => console.log('Audio play failed'));
+}
+
+// Add responsive adjustments
+function handleResize() {
+    // Adjust particle count on resize
+    const particles = document.querySelectorAll('.particle');
+    const idealCount = window.innerWidth < 768 ? 30 : 50;
+    
+    if (particles.length < idealCount) {
+        const container = document.getElementById('particles');
+        const needed = idealCount - particles.length;
+        for (let i = 0; i < needed; i++) {
+            createParticle(container);
         }
-        10% {
-            opacity: 1;
+    } else if (particles.length > idealCount) {
+        const container = document.getElementById('particles');
+        const toRemove = particles.length - idealCount;
+        for (let i = 0; i < toRemove; i++) {
+            if (container.lastChild) {
+                container.removeChild(container.lastChild);
+            }
         }
-        90% {
-            opacity: 1;
+    }
+}
+
+// Debounce resize handler
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(handleResize, 250);
+});
+
+// Add CSS for particles animation
+const additionalStyles = document.createElement('style');
+additionalStyles.textContent = `
+    @media (max-width: 768px) {
+        .glitch-text {
+            font-size: 24px;
         }
-        100% {
-            transform: translateY(-100vh) translateX(100px);
-            opacity: 0;
+        
+        .school-info h1 {
+            font-size: 18px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+        }
+        
+        .invitation-card,
+        .timeline-section,
+        .rsvp-form-section,
+        .memory-wall {
+            padding: 20px;
+        }
+        
+        .detail-text p {
+            font-size: 14px;
+        }
+        
+        .message-content h4 {
+            font-size: 15px;
+        }
+        
+        .footer-content {
+            gap: 25px;
         }
     }
     
-    @keyframes fadeIn {
-        from {
-            opacity: 0;
-            transform: translateY(20px);
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 12px;
         }
-        to {
-            opacity: 1;
-            transform: translateY(0);
+        
+        .glitch-text {
+            font-size: 22px;
+        }
+        
+        .school-info h1 {
+            font-size: 16px;
+        }
+        
+        .invitation-details {
+            gap: 12px;
+        }
+        
+        .detail-item {
+            padding: 12px;
+        }
+        
+        .rsvp-button,
+        .submit-btn,
+        .post-btn {
+            padding: 16px;
+            font-size: 15px;
+        }
+        
+        .input-with-icon input,
+        .input-with-icon select,
+        .input-with-icon textarea {
+            padding: 12px 12px 12px 40px;
+            font-size: 15px;
+        }
+        
+        .modal-content {
+            max-width: 320px;
+        }
+        
+        .creator-badge {
+            font-size: 13px;
+        }
+        
+        .creator-badge strong {
+            font-size: 14px;
         }
     }
     
-    @keyframes slideIn {
-        from {
-            transform: translateX(100%);
-            opacity: 0;
+    @media (max-width: 360px) {
+        .glitch-text {
+            font-size: 20px;
         }
-        to {
-            transform: translateX(0);
-            opacity: 1;
+        
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            font-size: 32px;
+        }
+        
+        .invite-tag {
+            font-size: 13px;
+            padding: 6px 14px;
+        }
+        
+        .card-header h3 {
+            font-size: 16px;
+        }
+        
+        .detail-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+        
+        .footer-info h4 {
+            font-size: 15px;
         }
     }
     
-    @keyframes slideOut {
-        from {
-            transform: translateX(0);
-            opacity: 1;
-        }
-        to {
-            transform: translateX(100%);
-            opacity: 0;
-        }
+    /* Prevent text selection on buttons */
+    button {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
     }
     
-    .notification.error {
-        background: rgba(255, 50, 50, 0.9) !important;
+    /* Improve scrolling on iOS */
+    .memories-container {
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    /* Fix for mobile keyboard */
+    @media (max-width: 768px) {
+        input, textarea, select {
+            font-size: 16px !important; /* Prevents zoom on iOS */
+        }
     }
 `;
-document.head.appendChild(style);
+document.head.appendChild(additionalStyles);
+
+// Initialize on load
+window.addEventListener('load', function() {
+    // Add loading animation
+    document.body.style.opacity = '0';
+    document.body.style.transition = 'opacity 0.3s';
+    
+    setTimeout(() => {
+        document.body.style.opacity = '1';
+    }, 100);
+    
+    // Check if mobile
+    if ('ontouchstart' in window) {
+        document.body.classList.add('touch-device');
+    }
+});
+
+// Export functions if needed (for debugging)
+window.FarewellApp = {
+    submitRSVP: handleRSVPSubmit,
+    postMemory: postMemory,
+    showNotification: showNotification,
+    validateEmail: validateEmail
+};
